@@ -1,4 +1,4 @@
-public class Pokemon {
+public class Pokemon   {
 	private String nome;
 	private String tipo;
 	private int numero;
