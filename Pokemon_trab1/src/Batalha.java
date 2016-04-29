@@ -105,27 +105,13 @@ public class Batalha extends Controller {
 				treinador2.pokemaoAtivo();
 				System.out.println("Pokemon atual do " + treinador2.getNome() + " foi substituido por " + treinador2.getAtivo().getNome() + " " + treinador2.getAtivo().getHp() + "/" + treinador2.getAtivo().getHpMax());
 
-			}
-	
-			
-			
-			
+			}	
 		}
 		
 		public String description (){
-			//if (atacou == true)
-				//return treinador1.getAtivo().getNome() + " usou " + treinador1.getAtivo().habilidade[i].getHabilidade() + ", causando " + treinador1.getAtivo().habilidade[i].getDano() + " de dano";  
 			return "";
 		}
 	}
-//	
-//	private class Rodada extends Event{
-//		public Rodada ()
-//	}
-//	
-//	private class rodada extends Event {
-//		
-//	}
 
 	public static void main(String[] args) throws InterruptedException {
 		Batalha batalha = new Batalha();
@@ -133,7 +119,6 @@ public class Batalha extends Controller {
 		int opcaoT1[] = {1,2,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1} , opcaoT2[] = {1,2,2,2,1,2,2,2,1,2,2,1,1,1,1,1,2,2,2,1,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1};
 		int i = 0;
 		
-//		Falta: quando um pokemon for pra fora de combate, temos que fazer outro entrar em seu lugar, ou seja, fazer um evento Troca
 		batalha.treinador1.pokemaoAtivo();
 		batalha.treinador2.pokemaoAtivo();
 		

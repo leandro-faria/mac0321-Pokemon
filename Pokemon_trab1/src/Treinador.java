@@ -15,20 +15,6 @@ public class Treinador {
 			pokemao [k] = pokemaos [k];
 	}
 	
-//	public int getNumTroca(){
-//		if (r < 5)
-//			return r++;
-//		else{
-//			r = 0;
-//			return r;
-//		}
-//	}
-	
-//	public void PokemaosTreinador(Pokemon [] pokemaos){
-//		for (int k = 0; k <= 5; k++)                              not in use
-//			pokemao [k] = pokemaos [k];
-//	}
-	
 	public String getTreinador (){
 		return this.nome;
 	}
