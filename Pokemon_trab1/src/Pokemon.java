@@ -38,14 +38,147 @@ public class Pokemon {
 		return tipo;
 	}
 	
-	public void levaDano (double dano){
-		if ((this.hp - dano) <= 0){
-			this.hp = 0;
-			derrotado = true;
-		}
-		else
-			this.hp = this.hp - dano;
+	public String getFraqueza(){
+		return fraqueza;
 	}
+	
+	public double levaDano (String string, double dano, String string2){
+		if(string == "fogo"){
+			if(string2 == "fogo" || string2 == "agua"){
+				if ((this.hp - (dano/2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano/2);
+				System.out.println("Ataque não muito efetivo");
+				return dano/2;
+			}
+			else if(string2 == "raio" || string2 == "lutador" || string2 == "psiquico"){
+				if ((this.hp - dano) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - dano;
+				System.out.println("Ataque regular");
+				return dano;
+			}
+		}
+		else if(string == "raio"){
+			if(string2 == "fogo" || string2 == "lutador" || string2 == "psiquico"){
+				if ((this.hp - dano) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - dano;
+				System.out.println("Ataque regular");
+				return dano;
+			}
+			else if(string2 == "raio"){
+				if ((this.hp - (dano/2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano/2);
+				System.out.println("Ataque não muito efetivo");
+				return dano/2;
+			}
+			else if(string2 == "agua"){
+				if ((this.hp - (dano*2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano*2);
+				System.out.println("Ataque super efetivo");
+				return dano*2;
+			}
+		}
+		else if(string == "agua"){
+			if(string2 == "fogo"){
+				if ((this.hp - (dano*2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano*2);
+				System.out.println("Ataque super efetivo");
+				return dano*2;
+			}
+			else if(string2 == "raio" || string2 == "lutador" || string2 == "psiquico"){
+				if ((this.hp - dano) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - dano;
+				System.out.println("Ataque regular");
+				return dano;
+			}
+			else if(string2 == "agua"){
+				if ((this.hp - (dano/2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano/2);
+				System.out.println("Ataque não muito efetivo");
+				return dano/2;
+			}
+		}
+		else if(string == "lutador"){
+			if(string2 == "fogo" || string2 == "raio" || string2 == "agua"){
+				if ((this.hp - dano) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - dano;
+				System.out.println("Ataque regular");
+				return dano;
+			}
+			else if(string2 == "lutador" || string2 == "psiquico"){
+				if ((this.hp - (dano/2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano/2);
+				System.out.println("Ataque não muito efetivo");
+				return dano/2;
+			}
+		}
+		else if(string == "psiquico"){
+			if(string2 == "fogo" || string2 == "raio" || string2 == "agua"){
+				if ((this.hp - dano) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - dano;
+				System.out.println("Ataque regular");
+				return dano;
+			}
+			else if(string2 == "lutador"){
+				if ((this.hp - (dano*2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano*2);
+				System.out.println("Ataque super efetivo");
+				return dano*2;
+			}
+			else if(string2 == "psiquico"){
+				if ((this.hp - (dano/2)) <= 0){
+					this.hp = 0;
+					derrotado = true;
+				}
+				else this.hp = this.hp - (dano/2);
+				System.out.println("Ataque não muito efetivo");
+				return dano/2;
+			}
+		}
+		return dano;
+	}
+//		if ((this.hp - dano) <= 0){
+//			this.hp = 0;
+//			derrotado = true;
+//		}
+//		else
+//			this.hp = this.hp - dano;
+//	}
 	
 	public boolean getEstado(){
 		return derrotado;

@@ -1,8 +1,13 @@
 abstract public class Event {
 	private long evtTime;
-	
-	public Event(long eventTime) {
+	private int prioridade;
+	public Event(long eventTime, int prioridade) {
 		evtTime = eventTime;
+		this.prioridade = prioridade;
+	}
+	
+	public int getPrioridade(){
+		return prioridade;
 	}
 	
 	public boolean ready() {

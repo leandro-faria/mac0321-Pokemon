@@ -6,24 +6,23 @@ public class Treinador {
 	private int i= 0;
 	private Pokemon ativo;
 	boolean perdeu = false;
-	private int r;
+	private int r = 0;
 	
-	public Treinador(String nome, int posicao, Pokemon [] pokemaos, int r){
+	public Treinador(String nome, int posicao, Pokemon [] pokemaos){
 		this.nome = nome;
 		this.posicao = posicao;
-		this.r = r;
 		for (int k = 0; k <= 5; k++)
 			pokemao [k] = pokemaos [k];
 	}
 	
-	public int getNumTroca(){
-		if (r < 5)
-			return r++;
-		else{
-			r = 0;
-			return r;
-		}
-	}
+//	public int getNumTroca(){
+//		if (r < 5)
+//			return r++;
+//		else{
+//			r = 0;
+//			return r;
+//		}
+//	}
 	
 //	public void PokemaosTreinador(Pokemon [] pokemaos){
 //		for (int k = 0; k <= 5; k++)                              not in use
@@ -36,11 +35,15 @@ public class Treinador {
 	
 	public void pokemaoAtivo(){
 		if (r < 6){
-			if(this.pokemao[r].getHp() != 0){
-				ativo = this.pokemao[r];
+			while(r < 6){
+				if(this.pokemao[r].getHp() != 0){
+					ativo = this.pokemao[r++];
+					return;
+				}
+			r++;
 			}
 		}
-		else {
+		if(r >= 6){
 			for(r = 0; r < 6; r++){
 				if(this.pokemao[r].getHp() != 0){
 					ativo = this.pokemao[r];
@@ -70,8 +73,18 @@ public class Treinador {
 		return perdeu;
 		
 	}
+	
+	public void Correu(){
+		for (int k = 0; k <= 5; k++)
+			pokemao[k].setHpAtual(0);
+	}
+	
 	public Pokemon getAtivo(){
 		return ativo;
+	}
+
+	public String getNome() {
+		return nome;
 	}
 	
 }

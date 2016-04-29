@@ -13,35 +13,37 @@ public class Batalha extends Controller {
 	private  Pokemon Raykou = new Raykou();
 	private  Pokemon Onix = new Onix();
 	Pokemon pokemons1[] = {Blastoise, Charmander, Zapdos, Moltres, Articuno, Mewtwo};
-	Pokemon pokemons2 [] = {Mew, Pikachu, Entei, Suicune, Raykou, Onix};
-	private  Treinador treinador1 = new Treinador("treinador1", 1, pokemons1, 0);
-	private Treinador treinador2 = new Treinador("treinador2", 2, pokemons2, 0);
+	Pokemon pokemons2 [] = {Pikachu, Mew, Suicune, Entei, Raykou, Onix};
+	private  Treinador treinador1 = new Treinador("treinador1", 1, pokemons1);
+	private Treinador treinador2 = new Treinador("treinador2", 2, pokemons2);
 
 	private class Correr extends Event {
 		Treinador treinador;
 		public Correr (long eventTime, Treinador treinador){
-			super (eventTime);
+			super (eventTime, 4);
 			this.treinador = treinador;
 		}
 		
 		public void action() {
 			//acaba a batalha, portanto encerra a simulacao
+			treinador.Correu();
+			treinador.Perdeu();
 			return;
 		}
 		
 		public String description () { 
 			//print na main falando qual treinador fugiu da batalha
+			System.out.println(treinador.getTreinador() + " fugiu da batalha!!");
+			System.exit(0);
 			return treinador.getTreinador() + " fugiu da batalha!!";
 		}
 	}
 	
 	private class Troca extends Event {
 		Treinador treinador;
-		int pokemao;
-		public Troca (long eventTime, Treinador treinador, int pokemao){ //pokemao deve ser um num entre 0 e 5
-			super(eventTime);
+		public Troca (long eventTime, Treinador treinador){ //pokemao deve ser um num entre 0 e 5
+			super(eventTime, 3);
 			this.treinador = treinador;
-			this.pokemao = pokemao;
 		}
 		
 		public void action () {
@@ -49,14 +51,14 @@ public class Batalha extends Controller {
 		}
 		
 		public String description (){
-			return "Pokemon atual foi substituido por " + treinador.getAtivo().getNome() + treinador.getAtivo().getHp() + "/" + treinador.getAtivo().getHpMax();
+			return "Pokemon atual foi substituido por " + treinador.getAtivo().getNome()+ " " + treinador.getAtivo().getHp() + "/" + treinador.getAtivo().getHpMax() + "\n";
 		}
 	}
 	
 	private class Cura extends Event {
 		Treinador treinador;
 		public Cura (long eventTime, Treinador treinador){
-			super (eventTime);
+			super (eventTime, 2);
 			this.treinador = treinador;
 		}
 		
@@ -69,7 +71,7 @@ public class Batalha extends Controller {
 				System.out.println("nao eh possivel recuperar a vida de um pokemon fora de combate :'((" );
 		}
 		public String description (){
-			return "hp de " + treinador.getAtivo().getNome() + " foi recuperado!!";
+			return "hp de " + treinador.getAtivo().getNome() + " foi recuperado!!\n";
 		}
 	}
 	
@@ -79,7 +81,7 @@ public class Batalha extends Controller {
 		int i;
 		boolean atacou = false;
 		public Ataca (long eventTime, Treinador treinador1, Treinador treinador2, int ataque){
-			super (eventTime);
+			super (eventTime, 1);
 			this.treinador1 = treinador1;
 			this.treinador2 = treinador2;
 			i = ataque;
@@ -88,107 +90,84 @@ public class Batalha extends Controller {
 		public void action () {
 			double dano = treinador1.getAtivo().habilidade[i].getDano();
 			if (treinador1.getAtivo().getHp() > 0){
-				treinador2.getAtivo().levaDano(dano); 
+				dano = treinador2.getAtivo().levaDano(treinador1.getAtivo().getTipo(), dano, treinador2.getAtivo().getTipo()); 
 				atacou = true;
+				System.out.println(treinador1.getAtivo().getNome() + " usou " + treinador1.getAtivo().habilidade[i].getHabilidade() + ", causando " + dano + " de dano");  
+				System.out.println("");
+				System.out.println(treinador1.getAtivo().getNome() + " " + treinador1.getAtivo().getHp() + "/" + treinador1.getAtivo().getHpMax());
+				System.out.println("");
+				System.out.println(treinador2.getAtivo().getNome() + " " + treinador2.getAtivo().getHp() + "/" + treinador2.getAtivo().getHpMax());
+				System.out.println("");
 			}
-			if(treinador2.getAtivo().getEstado() == true){
+			
+			if(treinador2.getAtivo().getEstado() == true && treinador2.Perdeu() == false){
+				System.out.println("Pokemon " + treinador2.getAtivo().getNome() + " estah fora de combate!!\n");
 				treinador2.pokemaoAtivo();
+				System.out.println("Pokemon atual do " + treinador2.getNome() + " foi substituido por " + treinador2.getAtivo().getNome() + " " + treinador2.getAtivo().getHp() + "/" + treinador2.getAtivo().getHpMax());
+
 			}
+	
+			
+			
+			
 		}
 		
 		public String description (){
-			if (atacou == true)
-				return treinador1.getAtivo().getNome() + " usou " + treinador1.getAtivo().habilidade[i].getHabilidade() + ", causando " + treinador1.getAtivo().habilidade[i].getDano() + " de dano";  
-			else return "";
+			//if (atacou == true)
+				//return treinador1.getAtivo().getNome() + " usou " + treinador1.getAtivo().habilidade[i].getHabilidade() + ", causando " + treinador1.getAtivo().habilidade[i].getDano() + " de dano";  
+			return "";
 		}
 	}
+//	
+//	private class Rodada extends Event{
+//		public Rodada ()
+//	}
+//	
+//	private class rodada extends Event {
+//		
+//	}
 
 	public static void main(String[] args) throws InterruptedException {
 		Batalha batalha = new Batalha();
 		int opcao = 0;
-		int opcaoT1[] = {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1} , opcaoT2[] = {1,3,3,3,3,3,3,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+		int opcaoT1[] = {1,2,1,1,1,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1} , opcaoT2[] = {1,2,2,2,1,2,2,2,1,2,2,1,1,1,1,1,2,2,2,1,1,1,1,1,1,2,1,1,1,1,1,2,1,1,1,1,1,1,1,1};
 		int i = 0;
 		
 //		Falta: quando um pokemon for pra fora de combate, temos que fazer outro entrar em seu lugar, ou seja, fazer um evento Troca
 		batalha.treinador1.pokemaoAtivo();
 		batalha.treinador2.pokemaoAtivo();
 		
-		while (opcao != 4 && batalha.treinador1.perdeu == false && batalha.treinador2.perdeu == false){
-			
-			if (opcaoT1[i] == 1 && opcaoT2 [i] == 1){
-				batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador1, batalha.treinador2, 0));
-				batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador2, batalha.treinador1, 0));
+		while (batalha.treinador1.perdeu == false && batalha.treinador2.perdeu == false){
+			if(opcaoT1[i] >= opcaoT2[i]){
+				if(opcaoT1[i] == 1) batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador1, batalha.treinador2, 0));
+				else if(opcaoT1[i] == 2) batalha.addEvent(batalha.new Cura(System.currentTimeMillis() +1000, batalha.treinador1));
+				else if(opcaoT1[i] == 3) batalha.addEvent(batalha.new Troca(System.currentTimeMillis() +1000, batalha.treinador1));
+				else if(opcaoT1[i] == 4) batalha.addEvent(batalha.new Correr(System.currentTimeMillis() +1000, batalha.treinador1));
 				batalha.run();
-				Thread.sleep(1000);
-				System.out.println("");
-				System.out.println(batalha.treinador1.getAtivo().getNome() + " " + batalha.treinador1.getAtivo().getHp() + "/" + batalha.treinador1.getAtivo().getHpMax());
-				System.out.println("");
-				System.out.println(batalha.treinador2.getAtivo().getNome() + " " + batalha.treinador2.getAtivo().getHp() + "/" + batalha.treinador2.getAtivo().getHpMax());
-				System.out.println("");
-				Thread.sleep(1000);
-				if (batalha.treinador1.getAtivo().getEstado() == true){
-					System.out.println("Pokemon " + batalha.treinador1.getAtivo().getNome() + " estah fora de combate!!");
-					batalha.addEvent(batalha.new Troca(System.currentTimeMillis() , batalha.treinador1, batalha.treinador1.getNumTroca()));
-					batalha.run();
-				}
-				if (batalha.treinador2.getAtivo().getEstado() == true){
-					System.out.println("Pokemon " + batalha.treinador2.getAtivo().getNome() + " estah fora de combate!!");
-					batalha.addEvent(batalha.new Troca(System.currentTimeMillis() , batalha.treinador2, batalha.treinador2.getNumTroca()));
-					batalha.run();
-				}
-				i++;
-			}
-			
-			if (opcaoT1[i] == 1 && opcaoT2[i] == 4 ){
-				opcao = 4;
-				batalha.addEvent(batalha.new Correr(System.currentTimeMillis(), batalha.treinador2));	
+				if(opcaoT2[i] == 1) batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador2, batalha.treinador1, 0));
+				else if(opcaoT2[i] == 2) batalha.addEvent(batalha.new Cura(System.currentTimeMillis() +1000, batalha.treinador2));
+				else if(opcaoT2[i] == 3) batalha.addEvent(batalha.new Troca(System.currentTimeMillis() +1000, batalha.treinador2));
+				else if(opcaoT2[i] == 4) batalha.addEvent(batalha.new Correr(System.currentTimeMillis() +1000, batalha.treinador2));
 				batalha.run();
 			}
-			
-			if (opcaoT1[i] == 1 && opcaoT2[i] == 2 ){
-				batalha.addEvent(batalha.new Cura(System.currentTimeMillis(), batalha.treinador2));
+			else if(opcaoT1[i] < opcaoT2[i]){
+				if(opcaoT2[i] == 1) batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador2, batalha.treinador1, 0));
+				else if(opcaoT2[i] == 2) batalha.addEvent(batalha.new Cura(System.currentTimeMillis() +1000, batalha.treinador2));
+				else if(opcaoT2[i] == 3) batalha.addEvent(batalha.new Troca(System.currentTimeMillis() +1000, batalha.treinador2));
+				else if(opcaoT2[i] == 4) batalha.addEvent(batalha.new Correr(System.currentTimeMillis() +1000, batalha.treinador2));
 				batalha.run();
-				Thread.sleep(1000);
-				System.out.println("");
-				System.out.println(batalha.treinador2.getAtivo().getNome() + " " + batalha.treinador2.getAtivo().getHp() + "/" + batalha.treinador2.getAtivo().getHpMax());
-				System.out.println("");
-				Thread.sleep(1000);
-				batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() , batalha.treinador1, batalha.treinador2, 1));
+				if(opcaoT1[i] == 1) batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador1, batalha.treinador2, 0));
+				else if(opcaoT1[i] == 2) batalha.addEvent(batalha.new Cura(System.currentTimeMillis() +1000, batalha.treinador1));
+				else if(opcaoT1[i] == 3) batalha.addEvent(batalha.new Troca(System.currentTimeMillis() +1000, batalha.treinador1));
+				else if(opcaoT1[i] == 4) batalha.addEvent(batalha.new Correr(System.currentTimeMillis() +1000, batalha.treinador1));
 				batalha.run();
-				System.out.println("");
-				System.out.println(batalha.treinador1.getAtivo().getNome() + " " + batalha.treinador1.getAtivo().getHp() + "/" + batalha.treinador1.getAtivo().getHpMax());
-				System.out.println("");
-				System.out.println(batalha.treinador2.getAtivo().getNome() + " " + batalha.treinador2.getAtivo().getHp() + "/" + batalha.treinador2.getAtivo().getHpMax());
-				System.out.println("");
-				Thread.sleep(1000);
-//				if (batalha.treinador1.getAtivo().getEstado() == true){
-//					System.out.println("Pokemon " + batalha.treinador1.getAtivo().getNome() + " estah fora de combate!!");
-//					batalha.addEvent(batalha.new Troca(System.currentTimeMillis() , batalha.treinador1, 1));
-//					break; 
-//				}
-				if (batalha.treinador2.getAtivo().getEstado() == true){
-					System.out.println("Pokemon " + batalha.treinador2.getAtivo().getNome() + " estah fora de combate!!");
-					batalha.addEvent(batalha.new Troca(System.currentTimeMillis() , batalha.treinador2, batalha.treinador2.getNumTroca()));
-					batalha.run();
-				}
-				i++;
 			}
-			
-			if (opcaoT1[i] == 1 && opcaoT2[i] == 3 ){
-				batalha.addEvent(batalha.new Troca(System.currentTimeMillis() , batalha.treinador2, batalha.treinador2.getNumTroca()));
-				batalha.run();
-				batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() , batalha.treinador1, batalha.treinador2, 0));
-				batalha.run();
-				System.out.println(batalha.treinador2.getAtivo().getNome() + " " + batalha.treinador2.getAtivo().getHp() + "/" + batalha.treinador2.getAtivo().getHpMax());
-				System.out.println("");
-				Thread.sleep(1000);
-				if (batalha.treinador2.getAtivo().getEstado() == true){
-					System.out.println("Pokemon " + batalha.treinador2.getAtivo().getNome() + " estah fora de combate    !!");
-					batalha.addEvent(batalha.new Troca(System.currentTimeMillis() , batalha.treinador2, batalha.treinador2.getNumTroca()));
-					batalha.run();
-				}
-				i++;
-			}
+			i++;
 		}
+		if (batalha.treinador1.perdeu == true)
+			System.out.println("O vencedor eh o " + batalha.treinador2.getTreinador());
+		if (batalha.treinador2.perdeu == true)
+			System.out.println("O vencedor eh o " + batalha.treinador1.getTreinador());
 	}
 }
+
