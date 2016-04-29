@@ -10,12 +10,11 @@ public class Batalha extends Controller {
 	private  Pokemon Onix = new Onix();
 	private  Pokemon Charmander = new Charmander();
 	Pokemon pokemons1[] = {Blastoise, Zapdos, Moltres, Articuno, Mewtwo};
-	Pokemon selvagens[] = {Pikachu};
 	private Treinador selvagem = new Treinador ("selvagem", 2, Pikachu);
-	private  Treinador treinador1 = new Treinador("treinador1", 1, pokemons1);
-	int i;
-	int j;
-	int mapa[][] = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
+	private Treinador treinador1 = new Treinador("treinador1", 1, pokemons1);
+	private int i = 0;
+	private int j = 0;
+	private int mapa[][] = {{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
 			{1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,},
 			{1,1,1,1,1,1,2,2,2,2,2,2,2,2,1,1,},
 			{2,2,2,2,1,1,2,2,2,2,2,2,2,2,1,1,},
@@ -33,25 +32,37 @@ public class Batalha extends Controller {
 
 	public void direita(){
 		if(j == 15)
-			if(i > 0) cima();
+			if(i > 0) {
+				cima();
+				return;
+			}
 		j++;
 	}
 	
 	public void esquerda(){
 		if(j == 0)
-			if(i < 15) baixo();
+			if(i < 15){
+				baixo();
+				return;
+			}
 		j--;
 	}
 	
 	public void cima(){
 		if(i == 0)
-			if(j > 0) esquerda();
+			if(j > 0) {
+				esquerda();
+				return;
+			}
 		i--;
 	}
 	
 	public void baixo(){
 		if(i == 15)
-			if(j < 15) direita();
+			if(j < 15) {
+				direita();
+				return;
+			}
 		i++;
 	}
 	
@@ -157,7 +168,7 @@ public class Batalha extends Controller {
 		}
 
 		public void action() {
-			for(int tmp = 0; tmp < 16; tmp++){
+			for(int tmp = 0; tmp < 1000000; tmp++){
 				Random gerador = new Random();
 				int x = gerador.nextInt(4);//0 == esquerda, 1 == direita, 2 == cima, 3 == baixo
 				if(x == 0){
@@ -176,16 +187,16 @@ public class Batalha extends Controller {
 					System.out.println("Treinador estah andando no gramado\n");
 					Random gerador2 = new Random();
 					int x2 = gerador2.nextInt(100);
-					if(x2 < 50){
+					if(x2 < 20){
 						return;
 					}
 				}
-				else System.out.println("Treinador estah andando no chão comum");
+				else System.out.println("Treinador estah andando no chão comum\n");
 			}
 		}
 
 		public String description() {
-			return "legal";
+			return "Treinador encontrou um pokemon selvagem\n";
 		}
 		
 	}
@@ -195,13 +206,14 @@ public class Batalha extends Controller {
 	public static void main(String[] args) throws InterruptedException {
 		Batalha batalha = new Batalha();
 		int opcao = 0;
-		int opcaoT1[] = {2,3,1,1,1,3,2,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
+		int opcaoT1[] = {1,3,1,1,1,3,2,3,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1};
 		int i = 0;
-		Random gerador = new Random();
+		Random gerador = new Random(19700621);
 		
 		batalha.treinador1.pokemaoAtivo();
 		
 		batalha.addEvent(batalha.new Mapa (System.currentTimeMillis() +1000, batalha.getMapa()));
+		batalha.run();
 		while (batalha.treinador1.perdeu == false && batalha.selvagem.perdeu == false){
 			if(opcaoT1[i] == 1) batalha.addEvent(batalha.new Ataca(System.currentTimeMillis() +1000, batalha.treinador1, batalha.selvagem, 0));
 			else if(opcaoT1[i] == 2) batalha.addEvent(batalha.new Cura(System.currentTimeMillis() +1000, batalha.treinador1));
